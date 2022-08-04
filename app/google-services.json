@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "663782485256",
+    "project_id": "amiami-bot",
+    "storage_bucket": "amiami-bot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663782485256:android:94ca0b39f961ec64a890bd",
+        "android_client_info": {
+          "package_name": "com.ethero"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663782485256-0kqjdl55oaafv9nah9q3h2c0rnne76q1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqr4SVAore6GPlvnBim-K6u4LNBTVbziQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663782485256-0kqjdl55oaafv9nah9q3h2c0rnne76q1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
