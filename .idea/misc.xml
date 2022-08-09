@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/amiami-notifier/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1105" />
+        <entry key="..\:/Projects/amiami-notifier/app/src/main/res/drawable/app_launcher_background.xml" value="0.1105" />
+        <entry key="..\:/Projects/amiami-notifier/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1105" />
+        <entry key="..\:/Projects/amiami-notifier/app/src/main/res/drawable/notification_icon.xml" value="0.1095" />
+        <entry key="..\:/Projects/amiami-notifier/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Projects/amiami-notifier/app/src/main/res/mipmap-anydpi-v26/app_launcher.xml" value="0.1105" />
         <entry key="app/src/main/res/drawable/not_yet_background.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/yet_background.xml" value="0.19" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18177083333333333" />
@@ -13,7 +19,7 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="corretto-11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="corretto-11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

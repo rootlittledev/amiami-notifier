@@ -1,68 +1,94 @@
 package com.ethero;
 
-import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
+import android.content.*;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.widget.ImageView;
+import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
-
 public class MainActivity extends AppCompatActivity {
+
+    private String imageUrl = "https://c.tenor.com/gPUlRZ1w3fUAAAAC/akairo-azur-lane.gif";
+    private String activityText = "Not yet";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageView imageView = (ImageView) findViewById(R.id.notification_image);
-        imageView.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(), R.mipmap.not_yet));
+        WebView imageView = findViewById(R.id.web_image);
+        imageView.getSettings().setLoadWithOverviewMode(true);
+        imageView.getSettings().setUseWideViewPort(true);
 
+        TextView text = findViewById(R.id.text_notification);
+        text.setMovementMethod(LinkMovementMethod.getInstance());
+        text.setLinkTextColor(Color.BLUE);
 
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        String url = sharedPref.getString("image", imageUrl);
+        imageView.loadUrl(url);
+
+        String savedText = sharedPref.getString("text", activityText);
+        text.setText(savedText);
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("update-event"));
-
-        FirebaseMessaging.getInstance().subscribeToTopic("figure_update")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Subscribed";
-                        if (!task.isSuccessful()) {
-                            msg = "Subscribe failed";
-                        }
-                        Log.d("Main", msg);
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+
+    private final BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            TextView text = (TextView) findViewById(R.id.text_notification);
-            text.setText("Updated !!!");
 
-            ImageView imageView = (ImageView) findViewById(R.id.notification_image);
-            imageView.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(), R.mipmap.yet_foreground));
+            Log.d("Broadcast", "Broadcast receiver");
 
+
+            String url = intent.getStringExtra("url");
+            String image = "https://c.tenor.com/M4ORXivVGfIAAAAd/azur-lane-le-malin.gif";
+
+            TextView text = findViewById(R.id.text_notification);
+            text.setMovementMethod(LinkMovementMethod.getInstance());
+            text.setLinkTextColor(Color.BLUE);
+            text.setText(url);
+
+            WebView imageView = findViewById(R.id.web_image);
+            imageView.getSettings().setLoadWithOverviewMode(true);
+            imageView.getSettings().setUseWideViewPort(true);
+            imageView.loadUrl(image);
         }
     };
 
+    public void onRefresh(View view) {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        TextView text = findViewById(R.id.text_notification);
+        text.setMovementMethod(LinkMovementMethod.getInstance());
+        text.setLinkTextColor(Color.BLUE);
+        text.setText(activityText);
+
+        WebView imageView = findViewById(R.id.web_image);
+        imageView.getSettings().setLoadWithOverviewMode(true);
+        imageView.getSettings().setUseWideViewPort(true);
+        imageView.loadUrl(imageUrl);
+
+        editor.clear();
+        editor.apply();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+    }
 }
 

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Amiami Notifier</string>
+    <string name="preference_file_key">data</string>
 </resources>
