@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -22,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d("main", "onCreate");
+
         WebView imageView = findViewById(R.id.web_image);
         imageView.getSettings().setLoadWithOverviewMode(true);
         imageView.getSettings().setUseWideViewPort(true);
@@ -33,11 +34,37 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
-        String url = sharedPref.getString("image", imageUrl);
-        imageView.loadUrl(url);
+        SharedPreferences.Editor editor = sharedPref.edit();
 
-        String savedText = sharedPref.getString("text", activityText);
-        text.setText(savedText);
+        if (getIntent().getExtras() != null
+                && getIntent().getExtras().getString("url") != null
+                && getIntent().getExtras().getString("image") != null) {
+
+            Log.d("main", "Loading from notification");
+
+            String url = getIntent().getExtras().getString("url");
+            text.setText(url);
+
+            String image = getIntent().getExtras().getString("image");
+
+            imageView.loadUrl(image);
+
+            Log.d("main", "Saving to preferences");
+
+            editor.putString("image", image);
+            editor.putString("text", url);
+
+            editor.apply();
+        } else {
+            Log.d("main", "Loading from preferences");
+
+            String url = sharedPref.getString("image", imageUrl);
+            imageView.loadUrl(url);
+
+            String savedText = sharedPref.getString("text", activityText);
+            text.setText(savedText);
+        }
+
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("update-event"));
     }
@@ -47,11 +74,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d("Broadcast", "Broadcast receiver");
+            Log.d("main", "Broadcast receiver");
 
 
             String url = intent.getStringExtra("url");
-            String image = "https://c.tenor.com/M4ORXivVGfIAAAAd/azur-lane-le-malin.gif";
+            String image = intent.getStringExtra("image");
+
+            Log.d("main", "Notification data, url:" + url + " and image:" + image);
 
             TextView text = findViewById(R.id.text_notification);
             text.setMovementMethod(LinkMovementMethod.getInstance());
@@ -66,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void onRefresh(View view) {
+
+        Log.d("main", "onRefresh");
+
         SharedPreferences sharedPref = getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
